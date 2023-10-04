@@ -3,7 +3,8 @@
 #include <PxPhysicsAPI.h>
 
 #include <vector>
-
+#include <list>
+#include "Particle.h"
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
@@ -14,6 +15,7 @@ std::string display_text = "This is a test";
 
 
 using namespace physx;
+using namespace std;
 
 PxDefaultAllocator		gAllocator;
 PxDefaultErrorCallback	gErrorCallback;
@@ -22,6 +24,7 @@ PxFoundation*			gFoundation = NULL;
 PxPhysics*				gPhysics	= NULL;
 
 
+PxSphereGeometry		sphereGeometry = NULL;
 PxMaterial*				gMaterial	= NULL;
 
 PxPvd*                  gPvd        = NULL;
@@ -29,6 +32,8 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
+Particle* part = nullptr;
+list<Particle*> shots;
 
 
 // Initialize physics engine
@@ -64,6 +69,21 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
+	//part->update();
+	auto it = shots.begin();
+	while (it != shots.end())
+	{
+		auto aux = it;
+		++aux;
+		PxTransform* trans = (*it)->getTransform();
+		if (trans->p.y < 10)
+		{
+			(*it)->~Particle();
+			shots.erase(it);
+		}
+		else (*it)->update(t);
+		it = aux;
+	}
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 }
@@ -82,9 +102,12 @@ void cleanupPhysics(bool interactive)
 	PxPvdTransport* transport = gPvd->getTransport();
 	gPvd->release();
 	transport->release();
-	
 	gFoundation->release();
-	}
+
+	for (auto& shot : shots)delete shot;
+	shots.clear();
+
+}
 
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)
@@ -95,8 +118,21 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 	//case 'B': break;
 	//case ' ':	break;
-	case ' ':
+	case 'Z':
 	{
+		Camera* cam = GetCamera();
+
+		PxShape* s = CreateShape(PxSphereGeometry(5));
+		PxTransform tr = cam->getTransform();
+		Vector3 vel = cam->getDir() * 45;// velocidad simulada 45 m/s
+		Vector3 acc = Vector3(0, -0.02245925758, 0);// gravedad simulada 
+		float damp = 1.5;
+		Vector4& color = Vector4(0.9, 0.1, 0.1, 1);
+
+		Particle* shot = new Particle(s, tr, vel, acc, damp, color);
+		shot->getRenderItem()->transform = shot->getTransform();
+		RegisterRenderItem(shot->getRenderItem());
+		shots.push_back(shot);
 		break;
 	}
 	default:
