@@ -27,9 +27,9 @@ private:
 
 public:
 	float startTime = 0;
-	Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, float damp, const Vector4& _color);
+	Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim, float damp, const Vector4& _color);
 	~Particle();
-	void update(float t);
+	void update(float t = 0.5);
 	void render();
 	void integrate(float t);
 

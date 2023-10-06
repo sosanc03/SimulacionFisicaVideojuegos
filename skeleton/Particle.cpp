@@ -1,6 +1,6 @@
 #include "Particle.h"
 
-Particle::Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, float damp, const Vector4& _color) {
+Particle::Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim,  float damp, const Vector4& _color) {
 	acel = acc;
 	damping = damp;
 	trans = trans_;
@@ -9,6 +9,7 @@ Particle::Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, 
 	rend->shape = _shape;
 	rend->transform = &trans_;
 	vel = v;
+	gS = gsim;
 }
 
 Particle::~Particle() {
@@ -19,6 +20,7 @@ Particle::~Particle() {
 
 void Particle::update(float t) {
 	integrate(t);
+	//trans.p += vel;
 	render();
 }
 
@@ -34,6 +36,7 @@ void Particle::integrate(float t)
 	(&trans)->p += vel * t;
 	// Update linear velocity
 	vel += acel * t;
+	vel += gS * t;
 	// Impose drag (damping)
 	vel *= powf(damping, t);
 }

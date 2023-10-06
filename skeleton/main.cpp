@@ -50,6 +50,18 @@ void initPhysics(bool interactive)
 	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(),true,gPvd);
 
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+	PxShape* s = CreateShape(PxSphereGeometry(5));
+	PxTransform tr;
+	tr.p = Vector3(-20, 0, 10);
+	Vector3 vel = Vector3(0, 0.001, 0);
+	Vector3 acc = Vector3(0, 0, 0);// 0.01
+	Vector3 gS = Vector3(0, 0, 0);// gravedad
+	float damp = 1;// 0.1
+	Vector4& color = Vector4(0.9, 0.1, 0.1, 1);
+
+	part = new Particle(s, tr, vel, acc, gS, damp, color);
+
+	RegisterRenderItem(part->getRenderItem());
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
@@ -69,7 +81,7 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
-	//part->update();
+	part->update();
 	auto it = shots.begin();
 	while (it != shots.end())
 	{
@@ -104,6 +116,7 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	gFoundation->release();
 
+	delete part;
 	for (auto& shot : shots)delete shot;
 	shots.clear();
 
@@ -125,11 +138,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		PxShape* s = CreateShape(PxSphereGeometry(5));
 		PxTransform tr = cam->getTransform();
 		Vector3 vel = cam->getDir() * 45;// velocidad simulada 45 m/s
-		Vector3 acc = Vector3(0, -0.02245925758, 0);// gravedad simulada 
+		Vector3 acc = Vector3(0, 0, 0);
+		Vector3 gS = Vector3(0, -0.02245925758, 0);// gravedad simulada 
 		float damp = 1.5;
 		Vector4& color = Vector4(0.9, 0.1, 0.1, 1);
 
-		Particle* shot = new Particle(s, tr, vel, acc, damp, color);
+		Particle* shot = new Particle(s, tr, vel, acc, gS, damp, color);
 		shot->getRenderItem()->transform = shot->getTransform();
 		RegisterRenderItem(shot->getRenderItem());
 		shots.push_back(shot);
