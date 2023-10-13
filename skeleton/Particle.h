@@ -24,16 +24,22 @@ private:
 	PxTransform trans;
 	
 
-
+	bool dest = false;
+	float lifetime = 0.0f;
 public:
 	float startTime = 0;
 	Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim, float damp, const Vector4& _color);
+	Particle(PxTransform pos, Vector3 dir);
 	~Particle();
 	void update(float t = 0.5);
 	void render();
 	void integrate(float t);
+	void bullet(Vector3 dir);
+	void fireball(Vector3 dir);
+	void laser(Vector3 dir);
 
 	PxTransform* getTransform() { return &trans; };
 	RenderItem* getRenderItem() { return rend; };
+	bool getDest() { return dest; };
 };
 

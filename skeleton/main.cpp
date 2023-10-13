@@ -5,6 +5,7 @@
 #include <vector>
 #include <list>
 #include "Particle.h"
+#include "ParticleGenerator.h"
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
@@ -33,6 +34,7 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 Particle* part = nullptr;
+ParticleGenerator* partGen = nullptr;
 list<Particle*> shots;
 
 
@@ -50,18 +52,20 @@ void initPhysics(bool interactive)
 	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(),true,gPvd);
 
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-	PxShape* s = CreateShape(PxSphereGeometry(5));
+	/*PxShape* s = CreateShape(PxSphereGeometry(5));
 	PxTransform tr;
 	tr.p = Vector3(-20, 0, 10);
-	Vector3 vel = Vector3(0, 0.001, 0);
-	Vector3 acc = Vector3(0, 0, 0);// 0.01
+	Vector3 vel = Vector3(0, 10, 0);
+	Vector3 acc = Vector3(0, 0.01, 0);// 0.01
 	Vector3 gS = Vector3(0, 0, 0);// gravedad
-	float damp = 1;// 0.1
-	Vector4& color = Vector4(0.9, 0.1, 0.1, 1);
+	float damp = 0.01;// 0.1
+	Vector4& color = Vector4(0.9, 0.1, 0.1, 1);*/
 
-	part = new Particle(s, tr, vel, acc, gS, damp, color);
+	//part = new Particle(s, tr, vel, acc, gS, damp, color);
 
-	RegisterRenderItem(part->getRenderItem());
+	//RegisterRenderItem(part->getRenderItem());
+
+	partGen = new ParticleGenerator();
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
@@ -81,21 +85,25 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
-	part->update();
+	//part->update();
 	auto it = shots.begin();
 	while (it != shots.end())
 	{
 		auto aux = it;
 		++aux;
 		PxTransform* trans = (*it)->getTransform();
-		if (trans->p.y < 10)
+		if ((*it)->getDest())
 		{
-			(*it)->~Particle();
+			delete *it;
 			shots.erase(it);
 		}
 		else (*it)->update(t);
 		it = aux;
 	}
+
+	partGen->update(t);
+
+
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 }
@@ -116,9 +124,11 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	gFoundation->release();
 
-	delete part;
+	//delete part;
 	for (auto& shot : shots)delete shot;
 	shots.clear();
+
+	delete partGen;
 
 }
 
@@ -140,7 +150,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		Vector3 vel = cam->getDir() * 45;// velocidad simulada 45 m/s
 		Vector3 acc = Vector3(0, 0, 0);
 		Vector3 gS = Vector3(0, -0.02245925758, 0);// gravedad simulada 
-		float damp = 1.5;
+		float damp = 1;
 		Vector4& color = Vector4(0.9, 0.1, 0.1, 1);
 
 		Particle* shot = new Particle(s, tr, vel, acc, gS, damp, color);
