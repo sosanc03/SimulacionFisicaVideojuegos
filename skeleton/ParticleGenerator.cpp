@@ -60,16 +60,13 @@ void ParticleGenerator::generate() {
 
     //otros parámetros
     Vector4 color;
-    float r = 0.6f; // radius
     double damp = 0.9f; // damping
     Vector3 gS = Vector3(0, -10, 0);
     Vector3 acc = Vector3(0, 0, 0);
-    float weight = 1.0f;
     PxShape* s = CreateShape(PxSphereGeometry(1));
 
-    int rndgen = rand() % 2;
-    //std:cout << rndgen + "\n";
-    if (rndgen == 0) {
+    int rnd = rand() % 2;
+    if (rnd == 0) {
         color = Vector4(0.9, 0, 0, 1);
         Particle* p = new Particle(s, tr, vel, acc, gS, damp, color);
         partSyst->addParticle(p);
@@ -78,7 +75,7 @@ void ParticleGenerator::generate() {
     else {
         gS = Vector3(0, 0, 0);
         color = Vector4(1, 1, 1, 1);
-        Firework* f = new Firework(tr, vel, acc, gS, weight, damp, color, r, partSyst);
+        Firework* f = new Firework(tr, vel, acc, gS, damp, color, partSyst);
         partSyst->addFirework(f);
     }
 

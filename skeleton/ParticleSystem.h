@@ -11,7 +11,7 @@ private:
 	list<Firework*> fireworks;
 
 public:
-	ParticleSystem();
+	ParticleSystem() {};
 	~ParticleSystem();
 	void update(float t);
 	void FireUpdate(float t);

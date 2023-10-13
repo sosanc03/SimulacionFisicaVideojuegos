@@ -1,12 +1,12 @@
 #include "Firework.h"
 #include "ParticleSystem.h"
 
-Firework::Firework(PxTransform pos, Vector3 vel, Vector3 acc, Vector3 grav, float weight, float damp, Vector4 c, float radius, ParticleSystem* pS)
-    : trans(pos), vel(vel), acel(acc), gS(grav), mass(weight), damping(damp), partS(pS)
+Firework::Firework(PxTransform pos, Vector3 vel, Vector3 acc, Vector3 grav, float damp, Vector4 c, ParticleSystem* pS)
+    : trans(pos), vel(vel), acel(acc), gS(grav), damping(damp), partS(pS)
 {
     rend = new RenderItem();
     rend->color = c;
-    rend->shape = CreateShape(physx::PxSphereGeometry(radius));
+    rend->shape = CreateShape(physx::PxSphereGeometry(1.0f));
     rend->transform = &trans;
     RegisterRenderItem(rend);
 }

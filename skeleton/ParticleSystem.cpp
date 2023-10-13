@@ -1,9 +1,5 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem() {
-
-}
-
 ParticleSystem::~ParticleSystem() {
     for (auto& i : particles) delete i;
     for (auto& j : fireworks) delete j;

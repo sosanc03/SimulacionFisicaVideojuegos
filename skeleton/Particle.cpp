@@ -48,7 +48,7 @@ void Particle::laser(Vector3 dir) {
     vel = dir * 25;// velocidad simulada
     acel = Vector3(0, 0, 0);
     gS = Vector3(0, 0, 0);// aproximadamente 0
-    //masa inversa simulada infinita
+    //masa simulada infinita
     damping = 1;
     Vector4 color = Vector4(0, 1, 0, 1);
     rend->color = color;

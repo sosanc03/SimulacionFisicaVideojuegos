@@ -15,11 +15,10 @@ private:
     Vector3 acel;
     Vector3 gS;
     float damping;
-    float mass;
     float lifetime = 0.0f;
     bool dest = false;
 public:
-    Firework(PxTransform pos, Vector3 vel, Vector3 acc, Vector3 grav, float weight, float damping, Vector4 c, float radius, ParticleSystem* pS);
+    Firework(PxTransform pos, Vector3 vel, Vector3 acc, Vector3 grav, float damping, Vector4 c, ParticleSystem* pS);
     ~Firework();
 
     void update(double t);
