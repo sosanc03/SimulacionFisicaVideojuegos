@@ -162,6 +162,18 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'G':
 		partGen->generate();
 		break;
+	case '1':
+		partGen->generate(0);
+		break;
+	case '2':
+		partGen->generate(1);
+		break;
+	case '3':
+		partGen->generate(2);
+		break;
+	case '4':
+		partGen->generate(3);
+		break;
 	default:
 		break;
 	}

@@ -13,7 +13,7 @@ public:
 	Vector3 NormalDistribution(float m, float d);
 	float RandomNormal(float m, float d);
 	void update(float t);
-	void generate();
+	void generate(int gen = 0);
 
 };
 

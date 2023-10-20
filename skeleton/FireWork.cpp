@@ -5,8 +5,11 @@ Firework::Firework(PxTransform pos, Vector3 vel, Vector3 acc, Vector3 grav, floa
     : trans(pos), vel(vel), acel(acc), gS(grav), damping(damp), partS(pS), gen(generation)
 {
     rend = new RenderItem();
-    rend->color = c;
-    rend->shape = CreateShape(physx::PxSphereGeometry(1.0f));
+    float num = 1 - 0.25 * gen;
+    rend->color = Vector4(num, num, num, 1);
+    rend->shape = CreateShape(physx::PxSphereGeometry(num));
+    //rend->color = c;
+    //rend->shape = CreateShape(physx::PxSphereGeometry(1.0f));
     rend->transform = &trans;
     RegisterRenderItem(rend);
 }

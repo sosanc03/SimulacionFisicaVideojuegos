@@ -48,7 +48,7 @@ float ParticleGenerator::RandomNormal(float mean, float stddev) {
     return mean + stddev * z;
 }
 
-void ParticleGenerator::generate() {
+void ParticleGenerator::generate(int gen) {
     Camera* camera = GetCamera();
 
     // posicion con randoms
@@ -79,7 +79,7 @@ void ParticleGenerator::generate() {
     else {
         gS = Vector3(0, 0, 0);
         color = Vector4(1, 1, 1, 1);
-        Firework* f = new Firework(tr, vel, acc, gS, damp, color, partSyst);
+        Firework* f = new Firework(tr, vel, acc, gS, damp, color, partSyst, gen);
         partSyst->addFirework(f);
     }
 
