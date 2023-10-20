@@ -159,6 +159,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		shots.push_back(shot);
 		break;
 	}
+	case 'G':
+		partGen->generate();
+		break;
 	default:
 		break;
 	}

@@ -9,7 +9,11 @@ ParticleGenerator::~ParticleGenerator() {
 }
 
 void ParticleGenerator::update(float t) {
-    generate();
+    /*timer += t;
+    if (timer >= 0.25f) {
+        generate();
+        timer = 0.0f;
+    }*/
     partSyst->update(t);
 }
 

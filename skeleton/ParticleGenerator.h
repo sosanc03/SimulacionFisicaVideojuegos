@@ -5,6 +5,7 @@ class ParticleGenerator
 {
 private:
 	ParticleSystem* partSyst;
+	float timer = 1.0f;
 public:
 	ParticleGenerator();
 	~ParticleGenerator();

@@ -29,7 +29,7 @@ private:
 public:
 	float startTime = 0;
 	Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim, float damp, const Vector4& _color);
-	Particle(PxTransform pos, Vector3 dir);
+	Particle(PxTransform pos, Vector3 dir/* int n = -1*/);
 	~Particle();
 	void update(float t = 0.5);
 	void render();
