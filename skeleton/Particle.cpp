@@ -61,19 +61,19 @@ Particle::~Particle() {
 }
 
 
-void Particle::update(float t) {
+bool Particle::update(float t) {
     lifetime += t;
-    if (lifetime >= 2.0f)dest = true;
+    if (lifetime >= 5.0f)dest = true;
     integrate(t);
-    //trans.p += vel;
     render();
+    return _remaining_time > 0.0;
 }
 
 void Particle::render() {
 	rend->transform = &trans;
 }
 
-void Particle::integrate(float t)
+/*void Particle::integrate(float t)
 {
 	// Trivial case, infinite mass --> do nothing
 	//if (inverse_massS <= 0.0f) return;
@@ -84,4 +84,17 @@ void Particle::integrate(float t)
 	vel += gS * t;
 	// Impose drag (damping)
 	vel *= powf(damping, t);
+}*/
+void Particle::integrate(float t)
+{
+    //addForce(gS);
+    // Semi-implicit Euler algorithm
+    // Get the accel considering the force accum
+    Vector3 resulting_accel = _force_accum * inverse_massS;
+    vel += resulting_accel * t; // Ex. 1.3 --> add acceleration
+    vel *= powf(damping, t); // Exercise 1.3 --> add damping
+    (&trans)->p += vel * t;
+    _remaining_time -= t;
+    // Clear accum
+    clearAccum();
 }

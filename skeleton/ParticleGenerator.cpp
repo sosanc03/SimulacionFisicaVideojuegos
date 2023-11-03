@@ -5,15 +5,15 @@ ParticleGenerator::ParticleGenerator() {
 }
 
 ParticleGenerator::~ParticleGenerator() {
-
+    delete partSyst;
 }
 
 void ParticleGenerator::update(float t) {
-    /*timer += t;
-    if (timer >= 0.25f) {
+    timer += t;
+    if (timer >= 0.05f) {
         generate();
         timer = 0.0f;
-    }*/
+    }
     partSyst->update(t);
 }
 
@@ -65,11 +65,12 @@ void ParticleGenerator::generate(int gen) {
     //otros parámetros
     Vector4 color;
     double damp = 0.9f; // damping
-    Vector3 gS = Vector3(0, -10, 0);
+    //Vector3 gS = Vector3(0, -10, 0);
     Vector3 acc = Vector3(0, 0, 0);
+    Vector3 gS = Vector3(0, -9.8, 0) /** powf((velS / velR), 2)*/;// gravedad simulada
     PxShape* s = CreateShape(PxSphereGeometry(1));
 
-    int rnd = rand() % 2;
+    /*int rnd = rand() % 2;
     if (rnd == 0) {
         color = Vector4(0.9, 0, 0, 1);
         Particle* p = new Particle(s, tr, vel, acc, gS, damp, color);
@@ -81,6 +82,10 @@ void ParticleGenerator::generate(int gen) {
         color = Vector4(1, 1, 1, 1);
         Firework* f = new Firework(tr, vel, acc, gS, damp, color, partSyst, gen);
         partSyst->addFirework(f);
-    }
+    }*/
 
+    color = Vector4(0.9, 0, 0, 1);
+    Particle* p = new Particle(s, tr, vel, acc, gS, damp, color);
+    partSyst->addParticle(p);
+    RegisterRenderItem(p->getRenderItem());
 }

@@ -11,8 +11,6 @@ private:
 	//energías y teniendo en cuenta que es la masa inversa
 	float velR = 940;// velocidad real
 	float velS = 45;// en m/s (velocidad simulada)
-	float inverse_mass = 250;// masa real 4 gramos
-	float inverse_massS = 883.600;// masa inversa simulada (masa real simulada 1.13 gramos)
 	Vector3 gR = Vector3(0, -9.8f, 0);// gravedad real
 	Vector3 gS = Vector3(0, -0.02245925758, 0);// gravedad simulada
 
@@ -26,12 +24,21 @@ private:
 
 	bool dest = false;
 	float lifetime = 0.0f;
+
+	Vector3 _force_accum = Vector3(0, 0, 0);
+	float _remaining_time;
 public:
 	float startTime = 0;
+	float inverse_mass = 250;// masa inversa 
+	float mass = 0.004;// masa real 4 gramos
+	float inverse_massS = 883.600;// masa inversa simulada (masa real simulada 1.13 gramos)
+	float massS = 3/*0.0011*/;// masa simulada 1,1 gramos
+
+
 	Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim, float damp, const Vector4& _color);
 	Particle(PxTransform pos, Vector3 dir/* int n = -1*/);
 	~Particle();
-	void update(float t = 0.5);
+	bool update(float t = 0.5);
 	void render();
 	void integrate(float t);
 	void bullet(Vector3 dir);
@@ -41,5 +48,22 @@ public:
 	PxTransform* getTransform() { return &trans; };
 	RenderItem* getRenderItem() { return rend; };
 	bool getDest() { return dest; };
+	Vector3 getVel() { return vel; }
+	float getVelR() { return velR; }
+	float getVelS() { return velS; }
+
+
+	// Accumulated force
+	Vector3 force;
+	// Clears accumulated force
+	void clearForce();
+	inline void clearAccum() {
+		_force_accum *= 0.0;
+	}
+	// Add force to apply in next integration only
+	//void addForce(const Vector3& f);
+	inline void addForce(Vector3 f) {
+		_force_accum += f;
+	}
 };
 
