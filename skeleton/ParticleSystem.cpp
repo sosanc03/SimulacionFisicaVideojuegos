@@ -36,7 +36,9 @@ void ParticleSystem::update(float t) {
 
 void ParticleSystem::addParticle(Particle* p) {
     particles.push_back(p);
-    addGravity(p);
+    //addGravity(p);
+    //addWind(p);
+    addVortex(p);
 }
 
 void ParticleSystem::addFirework(Firework* f) {
@@ -55,4 +57,18 @@ void ParticleSystem::addGravity(Particle* p) {
 
     GravityForceGenerator* g = new GravityForceGenerator(gS);
     partRgis->addRegistry(g, p);// añadimos la fuerza a la particula
+}
+
+void ParticleSystem::addWind(Particle* p) {
+    Vector3 wind = Vector3(-10, 0, 0);
+    float k1 = 0.25 /*coeficiente de rozamiento con el aire*/, k2 = 0.1;
+    WindForceGenerator* w = new WindForceGenerator(wind, k1, k2);
+    partRgis->addRegistry(w, p);// añadimos la fuerza a la particula
+}
+
+void ParticleSystem::addVortex(Particle* p) {
+    Vector3 wind = Vector3(-10, 0, 0);
+    float k = 0.0001 /*constante de fuerza del torbellino*/;
+    VortexForceGenerator* v = new VortexForceGenerator(k, wind);
+    partRgis->addRegistry(v, p);// añadimos la fuerza a la particula
 }

@@ -2,8 +2,10 @@
 #include <list>
 #include "Particle.h"
 #include "Firework.h"
-#include "GravityForceGenerator.h"
 #include "ParticleForceRegistry.h"
+#include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
+#include "VortexForceGenerator.h"
 using namespace std;
 
 class ParticleSystem
@@ -20,5 +22,8 @@ public:
 	void addParticle(Particle* p);
 	void addFirework(Firework* f);
 	void addGravity(Particle* p);
+	void addWind(Particle* p);
+	void addVortex(Particle* p);
+	
 };
 

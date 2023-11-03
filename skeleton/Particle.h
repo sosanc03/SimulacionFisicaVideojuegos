@@ -32,7 +32,7 @@ public:
 	float inverse_mass = 250;// masa inversa 
 	float mass = 0.004;// masa real 4 gramos
 	float inverse_massS = 883.600;// masa inversa simulada (masa real simulada 1.13 gramos)
-	float massS = 3/*0.0011*/;// masa simulada 1,1 gramos
+	float massS = 50/*0.0011*/;// masa simulada 1,1 gramos
 
 
 	Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim, float damp, const Vector4& _color);
