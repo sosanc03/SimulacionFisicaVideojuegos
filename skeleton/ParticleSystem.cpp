@@ -39,7 +39,7 @@ void ParticleSystem::addParticle(Particle* p) {
     //addGravity(p);
     //addWind(p);
     //addVortex(p);
-    addBurst(p);
+    //addBurst(p);
 }
 
 void ParticleSystem::addFirework(Firework* f) {
@@ -80,4 +80,8 @@ void ParticleSystem::addBurst(Particle* p) {
     float t = 2;
     BurstForceGenerator* b = new BurstForceGenerator(k, r, t);
     partRgis->addRegistry(b, p);// añadimos la fuerza a la particula
+}
+
+void ParticleSystem::addExplosion() {
+    for (auto& i : particles) addBurst(i);
 }

@@ -14,6 +14,7 @@ public:
 	float RandomNormal(float m, float d);
 	void update(float t);
 	void generate(int gen = 0);
+	ParticleSystem* getSys() { return partSyst; }
 
 };
 

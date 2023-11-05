@@ -22,6 +22,8 @@ public:
 	void update(float t);
 	void addParticle(Particle* p);
 	void addFirework(Firework* f);
+	void addExplosion();
+protected:
 	void addGravity(Particle* p);
 	void addWind(Particle* p);
 	void addVortex(Particle* p);

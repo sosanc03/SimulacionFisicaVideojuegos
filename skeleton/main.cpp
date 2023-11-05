@@ -174,6 +174,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '4':
 		partGen->generate(3);
 		break;
+	case 'E':
+		partGen->getSys()->addExplosion();
+		break;
 	default:
 		break;
 	}
