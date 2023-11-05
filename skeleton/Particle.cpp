@@ -1,7 +1,12 @@
 #include "Particle.h"
 
-Particle::Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim,  float damp, const Vector4& _color):
-acel(acc), damping(damp), trans(trans_), vel(v), gS(gsim){
+Particle::Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim,  float damp, const Vector4& _color, 
+    float Mass, float VelR, float VelS):
+acel(acc), damping(damp), trans(trans_), vel(v), gS(gsim), mass(Mass), velR(VelR), velS(VelS){
+   /*inverse_mass = 1 / mass;
+    inverse_massS = (powf(velS, 2) * inverse_mass) / powf(velR, 2);
+    massS = 1 / inverse_massS;*/
+    //massS = 1; // para la gravedad
 	rend = new RenderItem();
 	rend->color = _color;
 	rend->shape = _shape;
@@ -63,7 +68,7 @@ Particle::~Particle() {
 
 bool Particle::update(float t) {
     lifetime += t;
-    if (lifetime >= 5.0f)dest = true;
+    if (lifetime >= 10.0f)dest = true;
     integrate(t);
     render();
     return _remaining_time > 0.0;

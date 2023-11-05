@@ -6,6 +6,7 @@
 #include "GravityForceGenerator.h"
 #include "WindForceGenerator.h"
 #include "VortexForceGenerator.h"
+#include "BurstForceGenerator.h"
 using namespace std;
 
 class ParticleSystem
@@ -24,6 +25,7 @@ public:
 	void addGravity(Particle* p);
 	void addWind(Particle* p);
 	void addVortex(Particle* p);
+	void addBurst(Particle* p);
 	
 };
 

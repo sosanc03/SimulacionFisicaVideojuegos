@@ -83,9 +83,22 @@ void ParticleGenerator::generate(int gen) {
         Firework* f = new Firework(tr, vel, acc, gS, damp, color, partSyst, gen);
         partSyst->addFirework(f);
     }*/
-
-    color = Vector4(0.9, 0, 0, 1);
-    Particle* p = new Particle(s, tr, vel, acc, gS, damp, color);
-    partSyst->addParticle(p);
-    RegisterRenderItem(p->getRenderItem());
+    int rnd = rand() % 2;
+    if (rnd == 0) 
+    {
+        color = Vector4(0.9, 0, 0, 1);
+        Particle* p = new Particle(s, tr, vel, acc, gS, damp, color);
+        p->massS = 10;
+        partSyst->addParticle(p);
+        RegisterRenderItem(p->getRenderItem());
+    }
+    else {
+        color = Vector4(0.9, 0.4, 0, 1);
+        Particle *p = new Particle(s, tr, vel, acc, gS, damp, color);
+        p->massS = 1;
+        partSyst->addParticle(p);
+        RegisterRenderItem(p->getRenderItem());
+    }
+    
+  
 }
