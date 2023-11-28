@@ -52,6 +52,7 @@ public:
 	Vector3 getVel() { return vel; }
 	float getVelR() { return velR; }
 	float getVelS() { return velS; }
+	void setMass(float m) { massS = m; inverse_massS = 1 / m; }
 
 
 	// Accumulated force

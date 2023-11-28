@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-std::string display_text = "This is a test";
+std::string display_text = "Sofia Sanchez Fernandez";
 
 
 using namespace physx;
@@ -173,6 +173,23 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case '4':
 		partGen->generate(3);
+		break;
+	case '5':
+		partGen->getSys()->generateSpringDemo(partGen->getSys()->ANCHORED);
+		break;
+	case '6':
+		partGen->getSys()->generateSpringDemo(partGen->getSys()->SPRING);
+		break;
+	case '7':
+		partGen->getSys()->generateSpringDemo(partGen->getSys()->FLOTABILITY);
+		break;
+	case '8':
+		partGen->getSys()->generateSpringDemo(partGen->getSys()->GOMAELASTICA);
+		break;
+	case 'K':
+		int k;
+		cin >> k;
+		partGen->getSys()->addK(k);
 		break;
 	case 'E':
 		partGen->getSys()->addExplosion();
