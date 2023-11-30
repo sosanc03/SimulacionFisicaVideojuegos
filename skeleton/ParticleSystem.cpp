@@ -96,6 +96,7 @@ void ParticleSystem::generateSpringDemo(SpringType type) {
     SpringForceGenerator* f1;
     SpringForceGenerator* f2;
     AnchoredSpringFG* f3;
+    BuoyancyForceGenerator* f4;
     Particle* p1;
     Particle* p2;
     Particle* p3;
@@ -107,13 +108,14 @@ void ParticleSystem::generateSpringDemo(SpringType type) {
     {
     case ParticleSystem::SPRING:
         // First one standard spring uniting 2 particles
-        p1 = new Particle(s, tr, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color);
-        tr.p += Vector3(0, 15, 0);
-        p2 = new Particle(s, { 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color);
-        p2->setMass(2.0);
-        f1 = new SpringForceGenerator(1, 10, p2);
+        tr.p = Vector3(10, 30, 20);
+        p1 = new Particle(s, tr, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color, this);
+        tr.p = Vector3(20, 30, 10);
+        p2 = new Particle(s, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color, this);
+        //p2->setMass(2.0);
+        f1 = new SpringForceGenerator(0.04, 10, p2);
         partRgis->addRegistry(f1, p1);
-        f2 = new SpringForceGenerator(1, 10, p1);
+        f2 = new SpringForceGenerator(0.04, 10, p1);
         partRgis->addRegistry(f2, p2);
         RegisterRenderItem(p1->getRenderItem());
         RegisterRenderItem(p2->getRenderItem());
@@ -122,11 +124,11 @@ void ParticleSystem::generateSpringDemo(SpringType type) {
         break;
     case ParticleSystem::ANCHORED:
         //Then one spring with one fixed side
-        //Particle* p3 = new Particle(s, { -10.0, 20.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color);
-        p3 = new Particle(s, tr, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color);
+        tr.p = Vector3(10, 60, 20);
+        p3 = new Particle(s, tr, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color, this);
         //AnchoredSpringFG* f3 = new AnchoredSpringFG(0.1, 10, { 10.0,20.0,0.0 });
-        tr.p += Vector3(0, 0, 10);
-        f3 = new AnchoredSpringFG(5, 10, tr.p);
+        tr.p = Vector3(20, 60, 10);
+        f3 = new AnchoredSpringFG(0, 10, tr.p);
         //_force_generators.push_back(f3);
         RegisterRenderItem(p3->getRenderItem());
         addGravity(p3);
@@ -135,13 +137,13 @@ void ParticleSystem::generateSpringDemo(SpringType type) {
         break;
     case ParticleSystem::FLOTABILITY:
         s = CreateShape(PxBoxGeometry(1, 0.1, 1));
-        prev = new Particle(s, tr, Vector3(0, 0, 0), Vector3(0, 0, 0), gS, 0.85, color);
+        prev = new Particle(s, tr, Vector3(0, 0, 0), Vector3(0, 0, 0), gS, 0.85, color, this);
         RegisterRenderItem(prev->getRenderItem());
         particles.push_back(prev);
         s = CreateShape(PxBoxGeometry(1, 1, 1));
         for (int i = 0; i < num; ++i) {
             tr.p += Vector3(0, BETWEEN_SIZE * i, 0);
-            p = new Particle(s, tr, Vector3(0, 0, 0), Vector3(0, 0, 0), gS, 0.85, color);
+            p = new Particle(s, tr, Vector3(0, 0, 0), Vector3(0, 0, 0), gS, 0.85, color, this);
             RegisterRenderItem(p->getRenderItem());
             particles.push_back(p);
 
@@ -156,9 +158,9 @@ void ParticleSystem::generateSpringDemo(SpringType type) {
         }
         break;
     case GOMAELASTICA:
-        p1 = new Particle(s, tr, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color);
+        p1 = new Particle(s, tr, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color, this);
         tr.p += Vector3(0, 15, 0);
-        p2 = new Particle(s, { 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color);
+        p2 = new Particle(s, { 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color, this);
         p2->setMass(2.0);
         f1 = new SpringForceGenerator(1, 10, p2, true);
         partRgis->addRegistry(f1, p1);
@@ -168,6 +170,9 @@ void ParticleSystem::generateSpringDemo(SpringType type) {
         RegisterRenderItem(p2->getRenderItem());
         particles.push_back(p1);
         particles.push_back(p2);
+        break;
+    case BUOYANCY:
+        activateBuoyancy();
         break;
     default:
        break;
@@ -181,4 +186,39 @@ void ParticleSystem::addK(int k) {
             SF->setK(k);
         }
     }
+}
+
+void ParticleSystem::generateBuoyancy() {
+    BuoyancyForceGenerator* water = new BuoyancyForceGenerator(6, 0.5, 1000);
+    Vector4 color = Vector4(1, 0, 0, 1);
+    PxTransform tr = PxTransform(0, 0, 0);
+    Particle* p = new Particle(CreateShape(PxBoxGeometry(1, 1, 1)), tr, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1, color, this);
+    RegisterRenderItem(p->getRenderItem());
+    p->setMass(300);
+    particles.push_back(p);
+    partRgis->addRegistry(water, p);
+
+    tr = PxTransform(10, 0, 0);
+    color = Vector4(1, 1, 0, 1);
+    Particle* p1 = new Particle(CreateShape(PxBoxGeometry(1, 1, 1)), tr, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1, color, this);
+    RegisterRenderItem(p1->getRenderItem());
+    p1->setMass(3000);
+    particles.push_back(p1);
+    partRgis->addRegistry(water, p1);
+
+    tr = PxTransform(20, 0, 0);
+    color = Vector4(0, 1, 0, 1);
+    Particle* p2 = new Particle(CreateShape(PxBoxGeometry(1, 1, 1)), tr, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1, color, this);
+    p2->setMass(20);
+    RegisterRenderItem(p2->getRenderItem());
+    particles.push_back(p2);
+    partRgis->addRegistry(water, p2);
+
+    tr = PxTransform(30, 0, 0);
+    color = Vector4(0, 1, 1, 1);
+    Particle* p3 = new Particle(CreateShape(PxBoxGeometry(1, 1, 1)), tr, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1, color, this);
+    p3->setMass(120);
+    RegisterRenderItem(p3->getRenderItem());
+    particles.push_back(p3);
+    partRgis->addRegistry(water, p3);
 }

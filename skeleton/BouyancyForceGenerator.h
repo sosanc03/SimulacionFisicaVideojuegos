@@ -4,13 +4,14 @@
 
 class BuoyancyForceGenerator : public ForceGenerator {
 protected:
-	float height, volume, lDensity, gravity = 9.8;
+	float height, volume, liquidDensity, gravity = 9.8;
 	Particle* liquidParticle;
 
 public:
-	BuoyancyForceGenerator(float Height, float Volume, float Density) :height(Height), volume(Volume), lDensity(Density) {};
-	~BuoyancyForceGenerator() {};
+	BuoyancyForceGenerator(float Height, float Volume, float LiquidDensity);
+	~BuoyancyForceGenerator();
 
-	virtual void updateForce(Particle* particle);
+	virtual void updateForce(Particle* particle, double t);
+
 };
 

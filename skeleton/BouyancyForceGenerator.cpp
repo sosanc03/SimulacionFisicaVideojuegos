@@ -1,22 +1,38 @@
 #include "BouyancyForceGenerator.h"
 
-void BuoyancyForceGenerator::updateForce(Particle* particle) {
-	float h = particle->getTransform()->p.y;
-	float h0 = liquidParticle->getTransform()->p.y;
+BuoyancyForceGenerator::BuoyancyForceGenerator(float Height, float Volume, float LiquidDensity) {
+	height = Height;
+	volume = Volume;
+	liquidDensity = LiquidDensity;
+	Vector4 color = Vector4(0.9, 0, 0, 1);
+	PxTransform tr = PxTransform(0, 0, 0);
+	liquidParticle = new Particle(CreateShape(PxBoxGeometry(1, 0.1, 1)), tr, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85, color);
+}
 
-	Vector3 BuoyancyForce(0, 0, 0);
-	float inmersed = 0;
+BuoyancyForceGenerator::~BuoyancyForceGenerator() {
+	delete(liquidParticle);
+}
 
-	if (h - h0 > height * 0.5) {
-		inmersed = 0;
-	}
-	else if (h0 - h > height * 0.5) {
-		inmersed = 1;
-	}
+void BuoyancyForceGenerator::updateForce(Particle* particle, double t) {
+	if (fabs(particle->getInvMass()) < 1e-10) return;
 	else {
-		inmersed = (h0 - h) / height + 0.5;
-	}
-	BuoyancyForce.y = lDensity * volume * inmersed * gravity;
+		const float h = particle->getTransform()->p.y;
+		const float h0 = liquidParticle->getTransform()->p.y;
 
-	particle->addForce(BuoyancyForce);
+		Vector3 BuoyancyForce(0, 0, 0);
+		float inmersed = 0.0f;
+		if (h - h0 > height * 0.5f) {
+			inmersed = 0.0f;
+		}
+		else if (h0 - h > height * 0.5f) {
+			inmersed = 1.0f;
+		}
+		else {
+			inmersed = (h0 - h) / height + 0.5f;
+		}
+
+		BuoyancyForce.y = liquidDensity * volume * inmersed * gravity;
+
+		particle->addForce(BuoyancyForce);
+	}
 }

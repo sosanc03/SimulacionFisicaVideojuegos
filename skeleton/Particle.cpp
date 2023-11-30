@@ -1,8 +1,9 @@
 #include "Particle.h"
+#include "ParticleSystem.h"
 
-Particle::Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim,  float damp, const Vector4& _color, 
+Particle::Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim,  float damp, const Vector4& _color, ParticleSystem* partS,
     float Mass, float VelR, float VelS):
-acel(acc), damping(damp), trans(trans_), vel(v), gS(gsim), mass(Mass), velR(VelR), velS(VelS){
+acel(acc), damping(damp), trans(trans_), vel(v), gS(gsim), mass(Mass), velR(VelR), velS(VelS), partSys(partS){
    /*inverse_mass = 1 / mass;
     inverse_massS = (powf(velS, 2) * inverse_mass) / powf(velR, 2);
     massS = 1 / inverse_massS;*/
@@ -61,6 +62,7 @@ void Particle::laser(Vector3 dir) {
 }
 
 Particle::~Particle() {
+    if (partSys != nullptr)partSys->getPartRegis()->deleteParticleRegistry(this);
 	DeregisterRenderItem(rend);
 	delete rend;
 }
@@ -68,7 +70,7 @@ Particle::~Particle() {
 
 bool Particle::update(float t) {
     lifetime += t;
-    if (lifetime >= 10.0f)dest = true;
+    if (lifetime >= 100.0f)dest = true;
     integrate(t);
     render();
     return _remaining_time > 0.0;

@@ -2,6 +2,7 @@
 #include <PxPhysicsAPI.h>
 #include "RenderUtils.hpp"
 using namespace physx;
+class ParticleSystem;
 class Particle
 {
 private:
@@ -27,6 +28,8 @@ private:
 
 	Vector3 _force_accum = Vector3(0, 0, 0);
 	float _remaining_time;
+
+	ParticleSystem* partSys = nullptr;
 public:
 	float startTime = 0;
 	float inverse_mass = 250;// masa inversa 
@@ -35,7 +38,7 @@ public:
 	float massS = 1/*0.0011*/;// masa simulada 1,1 gramos
 
 
-	Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim, float damp, const Vector4& _color, 
+	Particle(PxShape* _shape, PxTransform trans_, Vector3 v, Vector3 acc, Vector3 gsim, float damp, const Vector4& _color, ParticleSystem* partS = nullptr, 
 		float Mass = 0.004, float VelR = 940, float VelS = 45);
 	Particle(PxTransform pos, Vector3 dir/* int n = -1*/);
 	~Particle();
@@ -52,8 +55,9 @@ public:
 	Vector3 getVel() { return vel; }
 	float getVelR() { return velR; }
 	float getVelS() { return velS; }
+	float getInvMass() { return 1 / massS; }
 	void setMass(float m) { massS = m; inverse_massS = 1 / m; }
-
+	void serShape(PxShape* _shape) { rend->shape = _shape; }
 
 	// Accumulated force
 	Vector3 force;

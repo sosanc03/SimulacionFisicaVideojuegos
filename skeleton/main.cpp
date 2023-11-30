@@ -186,6 +186,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '8':
 		partGen->getSys()->generateSpringDemo(partGen->getSys()->GOMAELASTICA);
 		break;
+	case '9':
+		//partGen->getSys()->generateSpringDemo(partGen->getSys()->BUOYANCY);
+		partGen->getSys()->generateBuoyancy();
+		break;
 	case 'K':
 		int k;
 		cin >> k;
@@ -193,6 +197,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'E':
 		partGen->getSys()->addExplosion();
+		break;
+	case '+':
+		partGen->getSys()->addTestMass(5);
+		break;
+	case '-':
+		partGen->getSys()->addTestMass(-5);
 		break;
 	default:
 		break;
