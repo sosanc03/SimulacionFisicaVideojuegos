@@ -6,6 +6,7 @@
 #include <list>
 #include "Particle.h"
 #include "ParticleGenerator.h"
+#include "RigidBodySystem.h"
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
@@ -35,6 +36,7 @@ PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 Particle* part = nullptr;
 ParticleGenerator* partGen = nullptr;
+RigidBodySystem* RBSys = nullptr;
 list<Particle*> shots;
 
 
@@ -47,25 +49,11 @@ void initPhysics(bool interactive)
 
 	gPvd = PxCreatePvd(*gFoundation);
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
-	gPvd->connect(*transport,PxPvdInstrumentationFlag::eALL);
+	gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
-	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(),true,gPvd);
+	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
 
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-	/*PxShape* s = CreateShape(PxSphereGeometry(5));
-	PxTransform tr;
-	tr.p = Vector3(-20, 0, 10);
-	Vector3 vel = Vector3(0, 10, 0);
-	Vector3 acc = Vector3(0, 0.01, 0);// 0.01
-	Vector3 gS = Vector3(0, 0, 0);// gravedad
-	float damp = 0.01;// 0.1
-	Vector4& color = Vector4(0.9, 0.1, 0.1, 1);*/
-
-	//part = new Particle(s, tr, vel, acc, gS, damp, color);
-
-	//RegisterRenderItem(part->getRenderItem());
-
-	partGen = new ParticleGenerator();
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
@@ -75,7 +63,17 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
-	}
+
+	//SUELO
+	PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform{ 0,0,0 });
+	PxShape* shape = CreateShape(PxBoxGeometry(100, 0.1, 100));
+	suelo->attachShape(*shape);
+	gScene->addActor(*suelo);
+	RenderItem* item = new RenderItem(shape, suelo, { 0.8,0.8,0.8,1 });
+
+	partGen = new ParticleGenerator();
+	RBSys = new RigidBodySystem(gScene, gPhysics);
+}
 
 
 // Function to configure what happens in each step of physics
@@ -102,6 +100,7 @@ void stepPhysics(bool interactive, double t)
 	}
 
 	partGen->update(t);
+	RBSys->update(t);
 
 
 	gScene->simulate(t);
@@ -196,14 +195,30 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		partGen->getSys()->addK(k);
 		break;
 	case 'E':
-		partGen->getSys()->addExplosion();
+		RBSys->addExplosion();
 		break;
-	case '+':
-		partGen->getSys()->addTestMass(5);
+	case 'R':
+		RBSys->addVortex();
 		break;
-	case '-':
-		partGen->getSys()->addTestMass(-5);
+	case 'T':
+		RBSys->addWind();
 		break;
+	case 'Y':
+		RBSys->addGravity();
+		break;
+	case 'M':
+		RBSys->createGenerators(g_cube);
+		break;
+	case 'N':
+		RBSys->createGenerators(g_sphere);
+		break;
+	case 'B':
+		RBSys->createGenerators(g_capsule);
+		break;
+	case 'V':
+		RBSys->shootRB();
+		break;
+
 	default:
 		break;
 	}

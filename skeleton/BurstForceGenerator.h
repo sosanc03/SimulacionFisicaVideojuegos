@@ -1,5 +1,6 @@
 #pragma once
 #include "ForceGenerator.h"
+#include "RigidBody.h"
 const double e = 2.7182818284;
 class BurstForceGenerator :
     public ForceGenerator
@@ -7,6 +8,7 @@ class BurstForceGenerator :
 public:
     BurstForceGenerator(const float k, const float r, const float t) : K(k), R(r), T(t) {}
     virtual void updateForce(Particle* particle, double t);
+    void updateForce(RigidBody* rb, double t);
 protected:
     float K /*intensidad*/;
     float T /*constante de tiempo*/ ;

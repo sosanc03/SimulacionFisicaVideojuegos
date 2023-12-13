@@ -8,6 +8,7 @@ ParticleSystem::~ParticleSystem() {
 }
 
 void ParticleSystem::update(float t) {
+    current += t;
     partRgis->updateForces(t);
     auto it = particles.begin();
     while (it != particles.end()) {
@@ -33,6 +34,7 @@ void ParticleSystem::update(float t) {
         else (*it2)->update(t);
         it2 = aux;
     }
+    if (current > 5000 && b != nullptr)quitaBurst();
 }
 
 void ParticleSystem::addParticle(Particle* p) {
@@ -64,7 +66,7 @@ void ParticleSystem::addGravity(Particle* p) {
 void ParticleSystem::addWind(Particle* p) {
     Vector3 wind = Vector3(-10, 0, 0);
     float k1 = 0.25 /*coeficiente de rozamiento con el aire*/, k2 = 0.1;
-    WindForceGenerator* w = new WindForceGenerator(wind, k1, k2);
+    w = new WindForceGenerator(wind, k1, k2);
     partRgis->addRegistry(w, p);// añadimos la fuerza a la particula
 }
 
@@ -84,7 +86,11 @@ void ParticleSystem::addBurst(Particle* p) {
 }
 
 void ParticleSystem::addExplosion() {
+    current = 0;
     for (auto& i : particles) addBurst(i);
+}
+void ParticleSystem::quitaBurst() {
+    for (auto& i : particles) partRgis->deleteForceRegistry(b, i);
 }
 
 void ParticleSystem::generateSpringDemo(SpringType type) {
@@ -93,9 +99,6 @@ void ParticleSystem::generateSpringDemo(SpringType type) {
     PxShape* s = CreateShape(PxSphereGeometry(1));
     Camera* camera = GetCamera();
     PxTransform tr = PxTransform(camera->getEye() + camera->getDir() * 50);
-    SpringForceGenerator* f1;
-    SpringForceGenerator* f2;
-    AnchoredSpringFG* f3;
     BuoyancyForceGenerator* f4;
     Particle* p1;
     Particle* p2;
@@ -128,10 +131,12 @@ void ParticleSystem::generateSpringDemo(SpringType type) {
         p3 = new Particle(s, tr, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, gS, 0.85, color, this);
         //AnchoredSpringFG* f3 = new AnchoredSpringFG(0.1, 10, { 10.0,20.0,0.0 });
         tr.p = Vector3(20, 60, 10);
-        f3 = new AnchoredSpringFG(0, 10, tr.p);
+        //f3 = new AnchoredSpringFG(0, 10, tr.p);
+        f3 = new AnchoredSpringFG(0.3, 10, tr.p);
+        particles.push_back(f3->getOther());
         //_force_generators.push_back(f3);
         RegisterRenderItem(p3->getRenderItem());
-        addGravity(p3);
+        //addGravity(p3);
         partRgis->addRegistry(f3, p3);
         particles.push_back(p3);
         break;
@@ -186,10 +191,14 @@ void ParticleSystem::addK(int k) {
             SF->setK(k);
         }
     }
+    //if(f1 != nullptr)f1->setK(k);
+    //if(f2 != nullptr)f2->setK(k);
+    //if (f3 != nullptr) { f3->setK(k); }
 }
 
 void ParticleSystem::generateBuoyancy() {
-    BuoyancyForceGenerator* water = new BuoyancyForceGenerator(6, 0.5, 1000);
+    BuoyancyForceGenerator* water = new BuoyancyForceGenerator(120, 0.5, 1000);
+    particles.push_back(water->getPart());
     Vector4 color = Vector4(1, 0, 0, 1);
     PxTransform tr = PxTransform(0, 0, 0);
     Particle* p = new Particle(CreateShape(PxBoxGeometry(1, 1, 1)), tr, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1, color, this);

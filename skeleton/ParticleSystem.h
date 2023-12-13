@@ -19,6 +19,12 @@ private:
 	ParticleForceRegistry* partRgis;
 	list<Particle*> particles;
 	list<Firework*> fireworks;
+	SpringForceGenerator* f1 = nullptr;
+	SpringForceGenerator* f2 = nullptr;
+	AnchoredSpringFG* f3 = nullptr;
+	int current = 0;
+	WindForceGenerator* w = nullptr;
+	BurstForceGenerator* b = nullptr;
 	//list<SpringForceGenerator*> springs;
 
 public:
@@ -28,6 +34,7 @@ public:
 	void addParticle(Particle* p);
 	void addFirework(Firework* f);
 	void addExplosion();
+	void quitaBurst();
 	void generateSpringDemo(SpringType type);
 	void generateBuoyancy();
 	void addK(int k);

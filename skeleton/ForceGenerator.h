@@ -2,6 +2,7 @@
 #include <PxPhysicsAPI.h>
 #include "RenderUtils.hpp"
 #include "Particle.h"
+#include "RigidBody.h"
 class ForceGenerator {
 public:
 	virtual void updateForce(Particle* particle, double duration = 0) = 0;
@@ -12,6 +13,7 @@ public:
 		_t += t;
 		return _t < _duration || _duration < 0.0; // Devuelve true si ya era cero o si es positivo
 	}
+	virtual void ForceGenerator::updateForce(RigidBody* rb, double t) {};
 	virtual ~ForceGenerator() {}
 };
 

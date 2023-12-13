@@ -24,6 +24,13 @@ public:
             else { it++; }
         }
     }
+    void deleteForceRegistry(ForceGenerator* f, Particle* p)
+    {
+        for (auto it = begin(); it != end(); ) {
+            if (it->first == f && it->second == p) { delete it->first; it = erase(it); }
+            else { it++; }
+        }
+    }
     void clear() { if(!(*this).empty())(*this).clear(); }
     multimap<ForceGenerator*, Particle*> const& getRegistry() { return *this; }
 };

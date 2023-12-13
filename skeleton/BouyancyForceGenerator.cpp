@@ -4,9 +4,10 @@ BuoyancyForceGenerator::BuoyancyForceGenerator(float Height, float Volume, float
 	height = Height;
 	volume = Volume;
 	liquidDensity = LiquidDensity;
-	Vector4 color = Vector4(0.9, 0, 0, 1);
+	Vector4 color = Vector4(0.1, 0.5, 0.6, 0.7);
 	PxTransform tr = PxTransform(0, 0, 0);
-	liquidParticle = new Particle(CreateShape(PxBoxGeometry(1, 0.1, 1)), tr, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85, color);
+	liquidParticle = new Particle(CreateShape(PxBoxGeometry(110, 110, 110)), tr, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85, color);
+	RegisterRenderItem(liquidParticle->getRenderItem());
 }
 
 BuoyancyForceGenerator::~BuoyancyForceGenerator() {
@@ -32,6 +33,7 @@ void BuoyancyForceGenerator::updateForce(Particle* particle, double t) {
 		}
 
 		BuoyancyForce.y = liquidDensity * volume * inmersed * gravity;
+		//if (particle->getTransform()->p.y >= height)BuoyancyForce.y = -BuoyancyForce.y;
 
 		particle->addForce(BuoyancyForce);
 	}

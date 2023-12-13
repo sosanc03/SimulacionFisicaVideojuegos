@@ -9,7 +9,8 @@ public:
 
 	virtual void updateForce(Particle* particle, double t);
 
-	inline void setK(double k) { _K = k; }
+	void setK(double k) { _K = k; }
+	Particle* getOther() { return _other; }
 
 	virtual ~SpringForceGenerator() {}
 protected:

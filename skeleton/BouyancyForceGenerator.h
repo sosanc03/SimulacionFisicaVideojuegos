@@ -10,7 +10,7 @@ protected:
 public:
 	BuoyancyForceGenerator(float Height, float Volume, float LiquidDensity);
 	~BuoyancyForceGenerator();
-
+	Particle* getPart() { return liquidParticle; }
 	virtual void updateForce(Particle* particle, double t);
 
 };

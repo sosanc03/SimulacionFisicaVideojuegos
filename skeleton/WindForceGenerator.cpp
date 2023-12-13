@@ -16,3 +16,11 @@ Vector3 WindForceGenerator::abs(Vector3 a) {
 Vector3 WindForceGenerator::prodVect(Vector3 a, Vector3 b) {
 	return Vector3((a.y * b.z - a.z * b.y), (a.x * b.z - a.z * b.x), (a.x * b.y - a.y * b.x));
 }
+
+void WindForceGenerator::updateForce(RigidBody* rb, double t) {
+	// Check that the particle has Finite Mass
+	if (fabs(rb->getInvMass()) < 1e-10)return;
+	Vector3 v = rb->getLinearVelocity();
+	Vector3 windForce = _k1 * (_wind - v) + _k2 * prodVect((abs(_wind - v)), (_wind - v));
+	rb->addForce(windForce);
+}
