@@ -66,10 +66,9 @@ public:
 
 	void integrate(float t) {
 		lifeTime -= t;
-		if (lifeTime <= 0 || transform.p.y <= -100) setAlive(false);
+		if (lifeTime <= 0 || transform.p.y <= -100) alive = false;
 	};
 
-	PxRigidDynamic* getRigidDynamic() { return solid; }
 	Vector3 getPosition() { return solid->getGlobalPose().p; }
 	Vector3 getLinearVelocity() { return solid->getLinearVelocity(); }
 	float getMass() { return solid->getMass(); }
@@ -79,12 +78,10 @@ public:
 	Vector4 getColor() { return render->color; }
 	Shape getShape() { return shapeType; }
 
-	void setPosition(Vector3 Pos) {
-		transform = PxTransform(Pos);
-		solid->setGlobalPose(transform);
-	}
-	void setLinearVelocity(Vector3 Vel) { solid->setLinearVelocity(Vel); }
+	//void setPosition(Vector3 Pos) {
+	//	transform = PxTransform(Pos);
+	//	solid->setGlobalPose(transform);
+	//}
 	void addForce(Vector3 force) { solid->addForce(force); }
-	void setAlive(bool A = false) { alive = A; }
 };
 

@@ -3,13 +3,13 @@
 default_random_engine generatorRB;
 
 void RigidBodyGenerator::update(float t) {
-	timeUntilNextGeneration -= t;
+	timeNxtGen -= t;
 }
 
 list<RigidBody*> RigidBodyGenerator::generateBodies() {
 	list<RigidBody*> listRB;
 	if (rb_ != nullptr) {
-		if (active && timeUntilNextGeneration <= 0) { // Si debe generar (tiempo y activo)
+		if (active && timeNxtGen <= 0) { // Si debe generar (tiempo y activo)
 			for (int i = 0; i < nGen; i++) {
 				normal_distribution<float> d(median, var); // Se contruye aqui para poder cambiar los parametros
 
@@ -20,7 +20,7 @@ list<RigidBody*> RigidBodyGenerator::generateBodies() {
 
 				listRB.push_back(rb);
 			}
-			timeUntilNextGeneration = frecuency; // Actualiza el tiempo hasta la generación
+			timeNxtGen = frecuency; // Actualiza el tiempo hasta la generación
 		}
 	}
 	return listRB;
