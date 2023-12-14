@@ -16,14 +16,14 @@ private:
 	RigidBody* rb_;
 	float var = 2, median = 0;
 
-	float frecuency;
+	float freq;
 	float timeNxtGen;
 
 	bool active = true;
 
 public:
-	RigidBodyGenerator(PxScene* Scene, PxPhysics* Physics, RigidBody* rb, Vector3 position, Vector3 Vel = Vector3(0, 0, 0), int numGen = 1, float Frecuency = 0.2) :
-		scene(Scene), physics(Physics), rb_(rb), pos(position), vel(Vel), nGen(numGen), frecuency(Frecuency), timeNxtGen(Frecuency), active(true) {
+	RigidBodyGenerator(PxScene* Scene, PxPhysics* Physics, RigidBody* rb, Vector3 position, Vector3 Vel = Vector3(0, 0, 0), int numGen = 1, float Freq = 0.2) :
+		scene(Scene), physics(Physics), rb_(rb), pos(position), vel(Vel), nGen(numGen), freq(Freq), timeNxtGen(Freq), active(true) {
 	};
 	void update(float t);
 	list<RigidBody*> generateBodies();

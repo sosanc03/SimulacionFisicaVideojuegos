@@ -9,7 +9,7 @@ void RigidBodyGenerator::update(float t) {
 list<RigidBody*> RigidBodyGenerator::generateBodies() {
 	list<RigidBody*> listRB;
 	if (rb_ != nullptr) {
-		if (active && timeNxtGen <= 0) { // Si debe generar (tiempo y activo)
+		if (active && timeNxtGen <= 0) { // Si debe generar
 			for (int i = 0; i < nGen; i++) {
 				normal_distribution<float> d(median, var); // Se contruye aqui para poder cambiar los parametros
 
@@ -20,7 +20,7 @@ list<RigidBody*> RigidBodyGenerator::generateBodies() {
 
 				listRB.push_back(rb);
 			}
-			timeNxtGen = frecuency; // Actualiza el tiempo hasta la generación
+			timeNxtGen = freq; // Actualiza el tiempo hasta la generación
 		}
 	}
 	return listRB;

@@ -48,23 +48,17 @@ void RigidBodySystem::createGenerators(GeneratorType T) {
 	Vector3 perpendicular = Vector3(0, 1, 0).cross(cam->getDir());
 	switch (T) {
 	case g_sphere: {
-		//RigidBody* rb_ = new RigidBody(scene, physics, Vector3(0, -500, 0), Vector3(-10, 0, 0), Vector3(0, 0, 0), 1, 20, s_sphere, Vector4(1, 0, 1, 1));
 		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(-10, 0, 0), Vector3(0, 0, 0), 1, 20, s_sphere, Vector4(1, 0, 0, 1));
-		//rbs.push_back(rb_);
 		rbGenerators.push_back(new RigidBodyGenerator(scene, physics, rb_, pos, perpendicular * 20, 1, 0.7));
 		break;
 	}
 	case g_cube: {
-		//RigidBody* rb_ = new RigidBody(scene, physics, Vector3(0, -500, 0), Vector3(-10, 0, 0), Vector3(0, 0, 0), 10, 20, s_cube, Vector4(1, 1, 0, 1));
 		RigidBody* rb_ = new RigidBody(scene, physics, pos,  Vector3(-10, 0, 0), Vector3(0, 0, 0), 1, 20, s_cube, Vector4(1, 0, 0, 1));
-		//rbs.push_back(rb_);
 		rbGenerators.push_back(new RigidBodyGenerator(scene, physics, rb_, pos, Vector3(0, 0, 0), 1, 0.7));
 		break;
 	}
 	case g_capsule: {
-		//RigidBody* rb_ = new RigidBody(scene, physics, Vector3(0, -500, 0), Vector3(-10, 0, 0), Vector3(0, 0, 0), 3, 20, s_capsule, Vector4(0, 1, 0, 1));
 		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(-10, 0, 0), Vector3(0, 0, 0), 1, 20, s_capsule, Vector4(1, 0, 0, 1));
-		//rbs.push_back(rb_);
 		rbGenerators.push_back(new RigidBodyGenerator(scene, physics, rb_, pos, Vector3(0, 0, 0), 1, 0.7));
 		break;
 	}
