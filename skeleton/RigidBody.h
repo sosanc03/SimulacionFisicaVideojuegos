@@ -20,13 +20,15 @@ protected:
 	Shape shapeType;
 	float lifeTime; 
 	bool alive;
+	bool time;
 
 public:
 	RigidBody(PxScene* scene, PxPhysics* physics,
 		const Vector3& Position, const Vector3& Velocity = Vector3(0, 0, 0), const Vector3& Inertia = Vector3(0, 0, 0),
 		double Mass = 1, double LifeTime = 30,
-		Shape Shape = s_cube, Vector4 Color = Vector4(0, 0, 0, 1)):lifeTime(LifeTime), alive(true), shapeType(Shape) {
+		Shape Shape = s_cube, Vector4 Color = Vector4(0, 0, 0, 1), int size = 1):lifeTime(LifeTime), alive(true), shapeType(Shape) {
 
+		time = true;
 		transform = physx::PxTransform(Position.x, Position.y, Position.z);
 		solid = physics->createRigidDynamic(transform);
 
@@ -40,16 +42,16 @@ public:
 		switch (shapeType)
 		{
 		case s_capsule:
-			shape = CreateShape(PxCapsuleGeometry(1, 1));
+			shape = CreateShape(PxCapsuleGeometry(size, size));
 			break;
 		case s_sphere:
-			shape = CreateShape(PxSphereGeometry(1));
+			shape = CreateShape(PxSphereGeometry(size));
 			break;
 		case s_cube:
-			shape = CreateShape(PxBoxGeometry(1, 1, 1));
+			shape = CreateShape(PxBoxGeometry(size, size, size));
 			break;
 		case s_rect:
-			shape = CreateShape(PxBoxGeometry(1, 2, 1));
+			shape = CreateShape(PxBoxGeometry(size, 2* size, size));
 			break;
 		}
 
@@ -58,15 +60,19 @@ public:
 		PxRigidBodyExt::updateMassAndInertia(*solid, 0.15);
 		scene->addActor(*solid);
 		render = new RenderItem(shape, solid, Color);
+		RegisterRenderItem(render);
 	}
 
 	~RigidBody() {
 		DeregisterRenderItem(render);
+		//delete render;
 	}
 
 	void integrate(float t) {
-		lifeTime -= t;
-		if (lifeTime <= 0 || transform.p.y <= -100) alive = false;
+		transform = solid->getGlobalPose();
+		if(time)lifeTime -= t;
+		if (lifeTime <= 0 || fueraLimites()) 
+			alive = false;
 	};
 
 	Vector3 getPosition() { return solid->getGlobalPose().p; }
@@ -77,11 +83,18 @@ public:
 	bool isAlive() { return alive; }
 	Vector4 getColor() { return render->color; }
 	Shape getShape() { return shapeType; }
+	void setTime(bool t = true) { time = t; }
+	void setLifeTime(float t) { lifeTime = t; }
 
 	//void setPosition(Vector3 Pos) {
 	//	transform = PxTransform(Pos);
 	//	solid->setGlobalPose(transform);
 	//}
 	void addForce(Vector3 force) { solid->addForce(force); }
+	bool fueraLimites() {
+		bool y = transform.p.y <= -10;
+		bool fueraSuelo = transform.p.x >= 470 || transform.p.z >= 470 || transform.p.x <= -50 || transform.p.z <= -50;
+		return (y || fueraSuelo);
+	}
 };
 

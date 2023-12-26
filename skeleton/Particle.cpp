@@ -70,7 +70,7 @@ Particle::~Particle() {
 
 bool Particle::update(float t) {
     lifetime += t;
-    if (lifetime >= 100.0f)dest = true;
+    if (lifetime >= 1.0f)dest = true;
     integrate(t);
     render();
     return _remaining_time > 0.0;

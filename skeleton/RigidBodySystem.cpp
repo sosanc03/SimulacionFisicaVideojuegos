@@ -68,8 +68,8 @@ void RigidBodySystem::createGenerators(GeneratorType T) {
 void RigidBodySystem::shootRB() {
 	Camera* cam = GetCamera();
 	Vector3 pos = cam->getEye() + cam->getDir();
-	Vector3 dir = cam->getDir() * 30;
+	Vector3 dir = Vector3(cam->getDir().x*190, cam->getDir().y*340, cam->getDir().z*150);
 
-	RigidBody* rb_ = new RigidBody(scene, physics, pos, dir, Vector3(0, 0, 0), 1, 20, s_sphere, Vector4(1, 0, 0, 1));
+	RigidBody* rb_ = new RigidBody(scene, physics, pos, dir, Vector3(0, 0, 0), 100, 20, s_sphere, Vector4(1, 0, 0, 1),  4.5);
 	rbs.push_back(rb_);
 }

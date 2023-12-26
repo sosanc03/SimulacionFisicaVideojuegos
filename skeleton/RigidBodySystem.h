@@ -9,7 +9,6 @@
 #include "WindForceGenerator.h"
 #include "VortexForceGenerator.h"
 #include "BurstForceGenerator.h"
-class SceneManager;
 
 using namespace std;
 
@@ -21,7 +20,6 @@ class RigidBodySystem {
 protected:
 	PxScene* scene;
 	PxPhysics* physics;
-	SceneManager* sMngr;
 
 	int numRB;
 	list<RigidBody*> rbs;

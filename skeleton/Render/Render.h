@@ -48,6 +48,10 @@
 #include <string>
 
 extern std::string display_text;
+extern std::string display_gameOver;
+extern std::string display_win;
+extern bool displayWinText;
+extern bool displayGameOverText;
 
 namespace Snippets
 {
