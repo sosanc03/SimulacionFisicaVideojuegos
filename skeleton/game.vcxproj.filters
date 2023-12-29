@@ -28,6 +28,7 @@
     <ClCompile Include="RigidBodyForceRegistry.cpp" />
     <ClCompile Include="RigidBodySystem.cpp" />
     <ClCompile Include="Generator.cpp" />
+    <ClCompile Include="Mirilla.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -58,6 +59,8 @@
     <ClInclude Include="RigidBodyForceRegistry.h" />
     <ClInclude Include="RigidBodySystem.h" />
     <ClInclude Include="Generator.h" />
+    <ClInclude Include="Mirilla.h" />
+    <ClInclude Include="Matrix4x4.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

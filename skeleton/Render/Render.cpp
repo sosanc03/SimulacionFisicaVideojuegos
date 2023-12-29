@@ -291,13 +291,17 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 	drawText(display_text, 0, 0);
 	if (displayGameOverText) {
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Por ejemplo, color rojo para "GAME OVER!"
-		drawText(display_gameOver, 200, 300); // Cambia las coordenadas según tu diseño
+		drawText(display_gameOver, 230, 250); // Cambia las coordenadas según tu diseño
 	}
 
 	if (displayWinText) {
 		// Lógica para mostrar el texto "YOU WIN!" en la posición deseada
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Por ejemplo, color rojo para "YOU WIN!"
 		drawText(display_win, 230, 250); // Cambia las coordenadas según tu diseño
+	}
+	if (displayContText) {
+		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+		drawText(display_cont, 330, 360);
 	}
 
 	// Setup camera

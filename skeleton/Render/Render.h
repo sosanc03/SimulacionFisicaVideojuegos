@@ -50,8 +50,10 @@
 extern std::string display_text;
 extern std::string display_gameOver;
 extern std::string display_win;
+extern std::string display_cont;
 extern bool displayWinText;
 extern bool displayGameOverText;
+extern bool displayContText;
 
 namespace Snippets
 {

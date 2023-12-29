@@ -1,14 +1,20 @@
 #include "Generator.h"
 
 void Generator::update(float t) {
+	cont -= t;
 	for (RigidBody* rb : rbs) { // RB
 		if (rb->isAlive()) { rb->integrate(t); }
 		else { rbsToDelete.push_back(rb); }
 	}
+	for (RigidBody* shoot : shoots) { // RB
+		if (shoot->isAlive()) { shoot->integrate(t); }
+		else { shootsToDelete.push_back(shoot); }
+	}
 	rbRgis->updateForces(t);
 	deleteUnusedRB();
 	if(win)Fireworks(t);
-	if (playing && numObstacles == 0) winGame(); 
+	if (playing && numObstacles == 0) winGame();
+	else if (playing && cont <= 0) gameOver();
 }
 void Generator::deleteUnusedRB() {
 	for (auto it = rbsToDelete.begin(); it != rbsToDelete.end();) {
@@ -18,15 +24,49 @@ void Generator::deleteUnusedRB() {
 		it = rbsToDelete.erase(it);
 		numObstacles--;
 	}
+	for (auto it = shootsToDelete.begin(); it != shootsToDelete.end();) {
+		rbRgis->deleteRigidBodyRegistry(*it);
+		shoots.remove(*it);
+		delete(*it);
+		it = shootsToDelete.erase(it);
+	}
 }
 
 void Generator::shootRB() {
-	Camera* cam = GetCamera();
-	Vector3 pos = cam->getEye() + cam->getDir();
-	Vector3 dir = Vector3(cam->getDir().x * 190, cam->getDir().y * 340, cam->getDir().z * 150);
+	if (playing) {
+		Camera* cam = GetCamera();
+		Vector3 pos = cam->getEye() + cam->getDir();
+		Vector3 dir = Vector3(cam->getDir().x * 190, cam->getDir().y * 450, cam->getDir().z * 150);
 
-	RigidBody* rb_ = new RigidBody(scene, physics, pos, dir, Vector3(0, 0, 0), 100, 20, s_sphere, Vector4(1, 0, 0, 1), 4.5);
-	rbs.push_back(rb_);
+		RigidBody* rb_ = new RigidBody(scene, physics, pos, dir, Vector3(0, 0, 0), 100, 20, s_sphere, Vector4(1, 0, 0, 1), 4.5);
+		shoots.push_back(rb_);
+	}
+}
+
+void Generator::shoot(Vector3 dir) {
+	if (playing) {
+		if (clic) {
+			Camera* cam = GetCamera();
+			Vector3 pos = cam->getEye() + cam->getDir();
+			//Vector3 d = Vector3(x, y, 0.5);
+			//d.normalize();
+			////Vector3 dir = Vector3(x - cam->getDir().x, y - cam->getDir().y, cam->getDir().z);
+			////Vector3 dir = Vector3(cam->getDir().x, d.y - cam->getDir().y, cam->getDir().z);
+			//Vector3 dir = Vector3(d.x * -15, d.y*5, d.x*-15);
+			////dir.z = 0.5;
+			////cout << cam->getDir().x << " " << cam->getDir().y << cam->getDir().z << " " << endl;
+			////cout << x << " " << y << endl;
+			//cout << d.x << " " << d.y << " " << d.z << endl;
+			//dir.normalize();
+			cout << dir.x << " " << dir.y << " " << dir.z << endl;
+			dir = cam->getDir() - dir;
+			//RigidBody* rb_ = new RigidBody(scene, physics, pos, dir*10, Vector3(0, 0, 0), 100, 20, s_sphere, Vector4(1, 0, 0, 1), 4.5);
+			//rbs.push_back(rb_);
+			clic = false;
+		}
+		else clic = true;
+	}
+	//cout << x << " " << y << endl;
 }
 
 bool Generator::nivel1() 
@@ -36,6 +76,7 @@ bool Generator::nivel1()
 		if (lose) borraFlot();
 		playing = true;
 		numObstacles = 1;
+		cont = 50;
 		Vector3 pos = Vector3(-15, 10, -15);
 		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
@@ -50,6 +91,16 @@ bool Generator::nivel2()
 		if (win) borraWin();
 		if (lose) borraFlot();
 		playing = true;
+		numObstacles = 2;
+		cont = 50;
+		Vector3 pos = Vector3(-15, 10, -15);
+		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
+		pos = Vector3(-15, 20, -15);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
 		return true;
 	}
 	return false;
@@ -60,6 +111,48 @@ bool Generator::nivel3()
 		if (win) borraWin();
 		if (lose) borraFlot();
 		playing = true;
+		numObstacles = 3;
+		cont = 50;
+		Vector3 pos = Vector3(-15, 10, -15);
+		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
+		pos = Vector3(-15, 20, -15);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
+		pos = Vector3(-15, 30, -15);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
+		return true;
+	}
+	return false;
+}
+bool Generator::nivel4()
+{
+	if (!playing) {
+		if (win) borraWin();
+		if (lose) borraFlot();
+		playing = true;
+		numObstacles = 4;
+		cont = 50;
+		Vector3 pos = Vector3(-15, 10, -15);
+		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
+		pos = Vector3(-15, 20, -15);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
+		pos = Vector3(-15, 10, -5);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
+		pos = Vector3(-5, 10, -15);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_->setTime(false);
+		rbs.push_back(rb_);
 		return true;
 	}
 	return false;
@@ -69,7 +162,8 @@ void Generator::winGame() {
 	if (!win) {
 		win = true;
 		playing = false;
-		while (!rbs.empty()) { rbsToDelete.push_back(rbs.front()); rbs.pop_front(); }
+		for (auto rb : rbs)rbsToDelete.push_back(rb);
+		for (auto shoot : shoots)shootsToDelete.push_back(shoot);
 		deleteUnusedRB();
 		fires = rand() % 5;
 		fires++;
@@ -87,6 +181,8 @@ void Generator::gameOver() {
 		lose = true;
 		playing = false;
 		water = new BuoyancyForceGenerator(120, 0.5, 1000);
+		for (auto shoot : shoots)shootsToDelete.push_back(shoot);
+		deleteUnusedRB();
 		for (auto rb : rbs) 
 			rbRgis->addRegistry(water, rb);
 	}

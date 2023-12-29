@@ -17,9 +17,11 @@
 std::string display_text = "Sofia Sanchez Fernandez";
 std::string display_gameOver = "GAME OVER!";
 std::string display_win = "YOU WIN!";
+std::string display_cont = "TIEMPO RESTANTE: ";
 
 bool displayWinText;
 bool displayGameOverText;
+bool displayContText = false;
 
 
 using namespace physx;
@@ -42,6 +44,8 @@ PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
 Generator* Gen = nullptr;
+PxRigidStatic* suelo;
+RenderItem* item;
 RigidBodySystem* RBSys = nullptr;
 
 
@@ -70,14 +74,17 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	//SUELO
-	PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform{ 280,0, 280 });
+	suelo = gPhysics->createRigidStatic(PxTransform{ 280,0, 280 });
 	PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
 	suelo->attachShape(*shape);
 	gScene->addActor(*suelo);
-	RenderItem* item = new RenderItem(shape, suelo, { 0.8,0.8,0.8,1 });
+	item = new RenderItem(shape, suelo, { 0.8,0.8,0.8,1 });
+	shape = CreateShape(PxBoxGeometry(0.1, 0.1, 0.1));
+	item->shape = shape;
 
 	RBSys = new RigidBodySystem(gScene, gPhysics);
 	Gen = new Generator(gScene, gPhysics);
+	GetCamera()->setGen(Gen);
 }
 
 
@@ -90,7 +97,18 @@ void stepPhysics(bool interactive, double t)
 
 	RBSys->update(t);
 	Gen->update(t);
-	if (Gen->win) displayWinText = true;
+	if (Gen->win) 
+	{ 
+		displayWinText = true; displayContText = false; 
+		PxShape* shape = CreateShape(PxBoxGeometry(0.1, 0.1, 0.1));
+		item->shape = shape;
+	}
+	else if (Gen->lose) {
+		displayGameOverText = true; displayContText = false; 
+		PxShape* shape = CreateShape(PxBoxGeometry(0.1, 0.1, 0.1));
+		item->shape = shape;
+	}
+	if(!Gen->win && !Gen->lose)display_cont = "TIEMPO RESTANTE: " + to_string(Gen->cont);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -115,6 +133,7 @@ void cleanupPhysics(bool interactive)
 	delete Gen;
 }
 
+
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)
 {
@@ -125,20 +144,37 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	//case 'B': break;
 	//case ' ':	break;
 	case '1':
-		if(Gen->nivel1())
-			{ displayWinText = false; displayGameOverText = false;}
+		if(Gen->nivel1()){ 
+			displayWinText = false; displayGameOverText = false; displayContText = true; 
+			PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
+			item->shape = shape;
+		}
 		break;
 	case '2':
-		if (Gen->nivel2())
-			{ displayWinText = false; displayGameOverText = false;}
+		if (Gen->nivel2()){ 
+			displayWinText = false; displayGameOverText = false; displayContText = true; 
+			PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
+			item->shape = shape;
+		}
 		break;
 	case '3':
-		if (Gen->nivel3()) 
-			{ displayWinText = false; displayGameOverText = false; }
+		if (Gen->nivel3()) { 
+			displayWinText = false; displayGameOverText = false; displayContText = true; 
+			PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
+			item->shape = shape;
+		}
 		break;
-	case 'T':
+	case '4':
+		if (Gen->nivel4()) {
+			displayWinText = false; displayGameOverText = false; displayContText = true;
+			PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
+			item->shape = shape;
+		}
+		break;
+	case ' ':
 		//RBSys->addWind();
-		RBSys->shootRB();
+		//RBSys->shootRB();
+		Gen->shootRB();
 		break;
 	case 'L':
 		Gen->gameOver();

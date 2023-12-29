@@ -84,7 +84,7 @@ void Firework::update(double t)
     //tiempo de vida (si es mayor que 5 segundos se borra)  
     lifetime += t;
     //comprobar si se tiene que borrar
-    if (lifetime >= 1.5) 
+    if (lifetime >= 1.0) 
         dest = true;
 }
 
