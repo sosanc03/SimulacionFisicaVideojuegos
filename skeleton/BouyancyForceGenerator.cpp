@@ -22,7 +22,7 @@ void BuoyancyForceGenerator::updateForce(Particle* particle, double t) {
 
 		Vector3 BuoyancyForce(0, 0, 0);
 		float inmersed = 0.0f;
-		if (h - h0 > height * 0.5f) {
+		if (h - h0 < height * 0.5f) {
 			inmersed = 0.0f;
 		}
 		else if (h0 - h > height * 0.5f) {

@@ -50,15 +50,19 @@ public:
 	void borraFlot();
 
 	void addWind() {
-		WindForceGenerator* wind = new WindForceGenerator(Vector3(-60, 0, 0), 25, 0.1);
-		for (auto rb : shoots)
-			rbRgis->addRegistry(wind, rb);
+		if (playing) {
+			WindForceGenerator* wind = new WindForceGenerator(Vector3(-60, 0, 0), 25, 0);
+			for (auto rb : shoots)
+				rbRgis->addRegistry(wind, rb);
+		}
 	}
 
 	void addExplosion() {
-		BurstForceGenerator* burst = new BurstForceGenerator(1000000, 15000000, 5);
-		for (auto rb : shoots)
-			rbRgis->addRegistry(burst, rb);
+		if (playing) {
+			BurstForceGenerator* burst = new BurstForceGenerator(1000000, 15000000, 5);
+			for (auto rb : shoots)
+				rbRgis->addRegistry(burst, rb);
+		}
 	}
 
 	void addFirework(Firework* f);

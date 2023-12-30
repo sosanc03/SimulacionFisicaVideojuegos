@@ -188,7 +188,7 @@ void Generator::gameOver() {
 	if (!lose) {
 		lose = true;
 		playing = false;
-		water = new BuoyancyForceGenerator(120, 0.5, 1000);
+		water = new BuoyancyForceGenerator(1200, 0.5, 1500);
 		for (auto shoot : shoots)shootsToDelete.push_back(shoot);
 		deleteUnusedRB();
 		for (auto rb : rbs) 
