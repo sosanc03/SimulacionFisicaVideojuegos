@@ -5,6 +5,7 @@
 #include "RigidBodyForceRegistry.h"
 #include "BouyancyForceGenerator.h"
 #include "WindForceGenerator.h"
+#include "BurstForceGenerator.h"
 #include "FireWork.h"
 #include "Particle.h"
 using namespace std;
@@ -52,6 +53,12 @@ public:
 		WindForceGenerator* wind = new WindForceGenerator(Vector3(-60, 0, 0), 25, 0.1);
 		for (auto rb : shoots)
 			rbRgis->addRegistry(wind, rb);
+	}
+
+	void addExplosion() {
+		BurstForceGenerator* burst = new BurstForceGenerator(1000000, 15000000, 5);
+		for (auto rb : shoots)
+			rbRgis->addRegistry(burst, rb);
 	}
 
 	void addFirework(Firework* f);

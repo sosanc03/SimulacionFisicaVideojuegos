@@ -172,15 +172,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		}
 		break;
 	case ' ':
-		//RBSys->addWind();
-		//RBSys->shootRB();
 		Gen->shootRB();
 		break;
-	case 'L':
-		Gen->gameOver();
-		displayGameOverText = true;
+	case 'E':
+		Gen->addExplosion();
 		break;
-	case 'O':
+	case 'R':
 		Gen->addWind();
 		break;
 	default:break;

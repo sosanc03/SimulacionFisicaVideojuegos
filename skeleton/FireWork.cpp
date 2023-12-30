@@ -7,7 +7,7 @@ Firework::Firework(PxTransform pos, Vector3 vel, Vector3 acc, Vector3 grav, floa
 {
     rend = new RenderItem();
     float num = 1 - 0.25 * gen;
-    rend->color = Vector4(num, num, num, 1);
+    rend->color = Vector4(1, num, num, 1);
     rend->shape = CreateShape(physx::PxSphereGeometry(num));
     //rend->color = c;
     //rend->shape = CreateShape(physx::PxSphereGeometry(1.0f));
@@ -19,8 +19,8 @@ Firework::Firework(PxTransform pos, Vector3 vel, Vector3 acc, Vector3 grav, floa
 {
     rend = new RenderItem();
     float num = 1 - 0.25 * gen;
-    rend->color = Vector4(num, num, num, 1);
-    rend->shape = CreateShape(physx::PxSphereGeometry(num));
+    rend->color = Vector4(1, num, num, 1);
+    rend->shape = CreateShape(physx::PxSphereGeometry(num * 0.5));
     //rend->color = c;
     //rend->shape = CreateShape(physx::PxSphereGeometry(1.0f));
     rend->transform = &trans;
@@ -33,8 +33,8 @@ Firework::Firework(PxTransform pos, Vector3 dir, int generation, ParticleSystem*
     rend->transform = &trans;
     float num = 1 - 0.25 * gen;
     vel = dir * 10 * num;
-    rend->color = Vector4(num, num, num, 1);
-    rend->shape = CreateShape(physx::PxSphereGeometry(num));
+    rend->color = Vector4(1, num, num, 1);
+    rend->shape = CreateShape(physx::PxSphereGeometry(num*0.5));
     RegisterRenderItem(rend);
 }
 
@@ -44,8 +44,8 @@ Firework::Firework(PxTransform pos, Vector3 dir, int generation, Generator* gn) 
     rend->transform = &trans;
     float num = 1 - 0.25 * gen;
     vel = dir * 10 * num;
-    rend->color = Vector4(num, num, num, 1);
-    rend->shape = CreateShape(physx::PxSphereGeometry(num));
+    rend->color = Vector4(1, num, num, 1);
+    rend->shape = CreateShape(physx::PxSphereGeometry(num * 0.5));
     RegisterRenderItem(rend);
 }
 

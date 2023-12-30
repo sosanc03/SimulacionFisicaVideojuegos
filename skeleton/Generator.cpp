@@ -92,13 +92,13 @@ bool Generator::nivel2()
 		if (lose) borraFlot();
 		playing = true;
 		numObstacles = 2;
-		cont = 50;
+		cont = 30;
 		Vector3 pos = Vector3(-15, 10, -15);
 		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		pos = Vector3(-15, 20, -15);
-		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 100, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		return true;
@@ -112,17 +112,17 @@ bool Generator::nivel3()
 		if (lose) borraFlot();
 		playing = true;
 		numObstacles = 3;
-		cont = 50;
+		cont = 25;
 		Vector3 pos = Vector3(-15, 10, -15);
 		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		pos = Vector3(-15, 20, -15);
-		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 10, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		pos = Vector3(-15, 30, -15);
-		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 200, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		return true;
@@ -136,21 +136,21 @@ bool Generator::nivel4()
 		if (lose) borraFlot();
 		playing = true;
 		numObstacles = 4;
-		cont = 50;
+		cont = 30;
 		Vector3 pos = Vector3(-15, 10, -15);
-		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		RigidBody* rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 10, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		pos = Vector3(-15, 20, -15);
-		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 10, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		pos = Vector3(-15, 10, -5);
-		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 300, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		pos = Vector3(-5, 10, -15);
-		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.00001, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
+		rb_ = new RigidBody(scene, physics, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 25, 20, s_cube, Vector4(0.7, 0.4, 0.5, 1), 3.5);
 		rb_->setTime(false);
 		rbs.push_back(rb_);
 		return true;
@@ -165,15 +165,23 @@ void Generator::winGame() {
 		for (auto rb : rbs)rbsToDelete.push_back(rb);
 		for (auto shoot : shoots)shootsToDelete.push_back(shoot);
 		deleteUnusedRB();
-		fires = rand() % 5;
+		fires = rand() % 15;
 		fires++;
 		numFires = 0;
 	}
 }
 void Generator::borraWin() {
 	win = false;
-	for (auto& j : fireworks) delete j;
-	for (auto& i : particles) delete i;
+	while (!fireworks.empty()) {
+		auto n = fireworks.front();
+		fireworks.pop_front();
+		delete n;
+	}
+	while (!particles.empty()) {
+		auto n = particles.front();
+		particles.pop_front();
+		delete n;
+	}
 }
 
 void Generator::gameOver() {
