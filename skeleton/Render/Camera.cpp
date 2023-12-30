@@ -55,34 +55,34 @@ void Camera::handleMouse(int button, int state, int x, int y)
 	PX_UNUSED(button);
 	mMouseX = x;
 	mMouseY = y;*/
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		// Suponiendo que tienes acceso a las matrices de proyección y vista de la cámara
-		Matrix4x4 projectionMatrix; // Matriz de proyección de la cámara
-		Matrix4x4 viewMatrix; // Matriz de vista de la cámara
+	//if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	//{
+	//	// Suponiendo que tienes acceso a las matrices de proyección y vista de la cámara
+	//	Matrix4x4 projectionMatrix; // Matriz de proyección de la cámara
+	//	Matrix4x4 viewMatrix; // Matriz de vista de la cámara
 
-		// Obtener las coordenadas de pantalla al hacer clic
-		int x_screen = x;
-		int y_screen = y;
+	//	// Obtener las coordenadas de pantalla al hacer clic
+	//	int x_screen = x;
+	//	int y_screen = y;
 
-		// Convertir las coordenadas de pantalla a coordenadas de clip (entre -1 y 1)
-		float x_clip = ((2.0f * x_screen) / 1920) - 1.0f;
-		float y_clip = 1.0f - ((2.0f * y_screen) / 1080);
+	//	// Convertir las coordenadas de pantalla a coordenadas de clip (entre -1 y 1)
+	//	float x_clip = ((2.0f * x_screen) / 1920) - 1.0f;
+	//	float y_clip = 1.0f - ((2.0f * y_screen) / 1080);
 
-		// Convertir las coordenadas de clip a coordenadas de vista (sin aplicar perspectiva)
-		Vector4 clipCoords(x_clip, y_clip, -1.0f, 1.0f);
-		Vector4 eyeCoords = projectionMatrix.inverse() * clipCoords;
-		eyeCoords.z = -1.0f; // Punto en el espacio cercano a la cámara
-		eyeCoords.w = 0.0f;
+	//	// Convertir las coordenadas de clip a coordenadas de vista (sin aplicar perspectiva)
+	//	Vector4 clipCoords(x_clip, y_clip, -1.0f, 1.0f);
+	//	Vector4 eyeCoords = projectionMatrix.inverse() * clipCoords;
+	//	eyeCoords.z = -1.0f; // Punto en el espacio cercano a la cámara
+	//	eyeCoords.w = 0.0f;
 
-		// Convertir las coordenadas de vista a coordenadas del mundo 3D
-		Vector4 worldCoords = viewMatrix.inverse() * eyeCoords;
-		Vector3 mouseWorldPosition(worldCoords.x, worldCoords.y, worldCoords.z);
+	//	// Convertir las coordenadas de vista a coordenadas del mundo 3D
+	//	Vector4 worldCoords = viewMatrix.inverse() * eyeCoords;
+	//	Vector3 mouseWorldPosition(worldCoords.x, worldCoords.y, worldCoords.z);
 
-		// Aquí `mouseWorldPosition` contiene las coordenadas en el espacio 3D
-		// Puedes usar estas coordenadas según sea necesario
-		Gen->shoot(mouseWorldPosition);
-	}
+	//	// Aquí `mouseWorldPosition` contiene las coordenadas en el espacio 3D
+	//	// Puedes usar estas coordenadas según sea necesario
+	//	Gen->shoot(mouseWorldPosition);
+	//}
 }
 
 bool Camera::handleKey(unsigned char key, int x, int y, float speed)

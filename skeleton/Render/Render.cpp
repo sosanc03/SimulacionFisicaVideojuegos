@@ -290,18 +290,39 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
 	drawText(display_text, 0, 0);
 	if (displayGameOverText) {
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Por ejemplo, color rojo para "GAME OVER!"
-		drawText(display_gameOver, 230, 250); // Cambia las coordenadas según tu diseño
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		int num = 150;
+		for (int i = 0; i < 28; i++) {
+			num += 10;
+			drawText(display_gameOver, 230, num);
+		}
+		num = 80;
+		for (int j = 0; j < 6; j++) {
+			num += 10;
+			drawText(display_gameOver, 230, num);
+		}
 	}
-
 	if (displayWinText) {
-		// Lógica para mostrar el texto "YOU WIN!" en la posición deseada
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Por ejemplo, color rojo para "YOU WIN!"
-		drawText(display_win, 230, 250); // Cambia las coordenadas según tu diseño
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f); 
+		int num = 150;
+		for (int i = 0; i < 28; i++) {
+			num += 10;
+			drawText(display_win, 230, num);
+		}
+		num = 80;
+		for (int j = 0; j < 6; j++) {
+			num += 10;
+			drawText(display_win, 230, num);
+		}
 	}
 	if (displayContText) {
 		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
 		drawText(display_cont, 330, 360);
+	}
+	if (displayTitleText) {
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f); 
+		drawText(display_title, 230, 250);
+		drawText(display_niv, 215, 215);
 	}
 
 	// Setup camera

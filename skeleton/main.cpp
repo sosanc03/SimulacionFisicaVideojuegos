@@ -15,13 +15,16 @@
 #include <iostream>
 
 std::string display_text = "Sofia Sanchez Fernandez";
-std::string display_gameOver = "GAME OVER!";
-std::string display_win = "YOU WIN!";
+std::string display_gameOver = "<<<<GAME OVER!>>>>";
+std::string display_win = "<<<<YOU WIN!>>>>";
 std::string display_cont = "TIEMPO RESTANTE: ";
+std::string display_title = "<<<<DESTRUYE BLOQUES>>>>";
+std::string display_niv = "Pulsa 1 para jugar al nivel de prueba";
 
 bool displayWinText;
 bool displayGameOverText;
 bool displayContText = false;
+bool displayTitleText = true;
 
 
 using namespace physx;
@@ -46,7 +49,6 @@ ContactReportCallback gContactReportCallback;
 Generator* Gen = nullptr;
 PxRigidStatic* suelo;
 RenderItem* item;
-RigidBodySystem* RBSys = nullptr;
 
 
 // Initialize physics engine
@@ -82,9 +84,8 @@ void initPhysics(bool interactive)
 	shape = CreateShape(PxBoxGeometry(0.1, 0.1, 0.1));
 	item->shape = shape;
 
-	RBSys = new RigidBodySystem(gScene, gPhysics);
 	Gen = new Generator(gScene, gPhysics);
-	GetCamera()->setGen(Gen);
+	//GetCamera()->setGen(Gen);
 }
 
 
@@ -95,7 +96,6 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
-	RBSys->update(t);
 	Gen->update(t);
 	if (Gen->win) 
 	{ 
@@ -145,28 +145,28 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	//case ' ':	break;
 	case '1':
 		if(Gen->nivel1()){ 
-			displayWinText = false; displayGameOverText = false; displayContText = true; 
+			displayWinText = false; displayGameOverText = false; displayContText = true; displayTitleText = false;
 			PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
 			item->shape = shape;
 		}
 		break;
 	case '2':
 		if (Gen->nivel2()){ 
-			displayWinText = false; displayGameOverText = false; displayContText = true; 
+			displayWinText = false; displayGameOverText = false; displayContText = true; displayTitleText = false;
 			PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
 			item->shape = shape;
 		}
 		break;
 	case '3':
 		if (Gen->nivel3()) { 
-			displayWinText = false; displayGameOverText = false; displayContText = true; 
+			displayWinText = false; displayGameOverText = false; displayContText = true; displayTitleText = false;
 			PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
 			item->shape = shape;
 		}
 		break;
 	case '4':
 		if (Gen->nivel4()) {
-			displayWinText = false; displayGameOverText = false; displayContText = true;
+			displayWinText = false; displayGameOverText = false; displayContText = true; displayTitleText = false;
 			PxShape* shape = CreateShape(PxBoxGeometry(300, 0.1, 300));
 			item->shape = shape;
 		}
