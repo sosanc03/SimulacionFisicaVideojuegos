@@ -10,8 +10,8 @@ void Generator::update(float t) {
 		if (shoot->isAlive()) { shoot->integrate(t); }
 		else { shootsToDelete.push_back(shoot); }
 	}
-	rbRgis->updateForces(t);
 	deleteUnusedRB();
+	rbRgis->updateForces(t);
 	if(win)Fireworks(t);
 	if (playing && numObstacles == 0) winGame();
 	else if (playing && cont <= 0) gameOver();
@@ -198,7 +198,7 @@ void Generator::gameOver() {
 void Generator::borraFlot() {
 	while (!rbs.empty()) { rbsToDelete.push_back(rbs.front()); rbs.pop_front(); }
 	deleteUnusedRB();
-	//	delete water;
+	delete water;
 	lose = false;
 }
 

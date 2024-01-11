@@ -65,6 +65,8 @@ public:
 	}
 
 	~RigidBody() {
+		render->color = Vector4(0, 0, 0, 1);
+		//DeregisterRenderItem(render);
 		//if (shape) {
 		//	solid->detachShape(*shape); // Elimina la forma del objeto rígido si existe
 		//	shape->release(); // Libera la memoria de la forma si existe
@@ -79,8 +81,8 @@ public:
 
 		//if (render) {
 		//	DeregisterRenderItem(render); // Elimina el elemento de representación si existe
-		//	//delete render; // Libera la memoria del elemento de representación
-		//	//render = nullptr; // Establece el puntero a nulo después de liberar la memoria
+		//	delete render; // Libera la memoria del elemento de representación
+		//	render = nullptr; // Establece el puntero a nulo después de liberar la memoria
 		//}
 	}
 
